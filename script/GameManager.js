@@ -33,24 +33,20 @@ window.onload = () => {
     }
 
     console.log("WebFont");
-    // WebFont.load({
-    //     google: {
-    //         families: ['Inter']
-    //     },
-    //     active: () => {
-    //         loading$.subscribe((value) => {
-    //             showLoading(value);
-    //         });
+    WebFont.load({
+        google: {
+            families: ['Inter']
+        },
+        active: () => {
+            loading$.subscribe((value) => {
+                showLoading(value);
+            });
 
-    //         initGame$.subscribe(() => {
-    //             initGame()
-    //             loading$.next(false);
-    //         });
-    //     }
-    // });
-    initGame();
-    loading$.subscribe((value) => {
-        showLoading(value);
+            initGame$.subscribe(() => {
+                initGame()
+                loading$.next(false);
+            });
+        }
     });
-    loading$.next(false);
+
 }
