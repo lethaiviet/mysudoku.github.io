@@ -15,7 +15,8 @@ const {
     startWith,
     switchMap,
     tap,
-    throttleTime
+    throttleTime,
+    filter,
 } = rxjs.operators;
 
 window.onload = () => {
@@ -166,6 +167,7 @@ window.onload = () => {
         );
 
         const numpad$ = event$.pipe(
+            filter(() => !SUDOKU.isCompleted()),
             throttleTime(200),
             tap((state) => SUDOKU_GRAPHIC.changeBlockValueAndDraw(state.value))
         )
@@ -182,8 +184,16 @@ window.onload = () => {
             SUDOKU_GRAPHIC.enablePencilMode(state);
         });
 
-        fromClick("undo-btn").subscribe(() => SUDOKU_GRAPHIC.undoAndDraw());
-        fromClick("hint-btn").subscribe(() => SUDOKU_GRAPHIC.useHintAndDraw());
+        fromClick("undo-btn").pipe(
+            filter(() => !SUDOKU.isCompleted())
+        ).subscribe(() => SUDOKU_GRAPHIC.undoAndDraw());
+
+        fromClick("hint-btn").pipe(
+            filter(() => !SUDOKU.isCompleted())
+        ).subscribe(() => {
+            SUDOKU_GRAPHIC.useHintAndDraw();
+            updateHintText();
+        });
     }
 
     const initToggleAutoCheckMistake = () => {
@@ -197,6 +207,7 @@ window.onload = () => {
         SUDOKU = new Sudoku(level);
         SUDOKU_GRAPHIC = new SudokuGraphic(CANVAS, SUDOKU);
         SUDOKU_GRAPHIC.drawPlayScreen();
+        updateHintText();
     }
 
     const handleClickOnSudokuGrid = (event) => {
@@ -225,6 +236,10 @@ window.onload = () => {
     const setIconPlayPauseBtn = (isCounting) => {
         const attribute = isCounting ? "fa fa-pause" : "fa fa-play";
         PLAY_PAUSE_BTN.querySelector("i").setAttribute("class", attribute);
+    }
+
+    const updateHintText = () => {
+        document.querySelector('#hint-txt').innerHTML = `Hint: ${SUDOKU.getNumbHints()}`;
     }
 
     WebFont.load({
