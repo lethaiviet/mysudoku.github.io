@@ -101,6 +101,7 @@ export default class Sudoku {
 
             this.COUNT = 0;
             this.solveSudoku(gridCopy);
+
             if (this.COUNT != 1) {
                 this.GRID[row][col] = backup;
                 level--;
@@ -360,6 +361,7 @@ export default class Sudoku {
         this.PENCIL_GRID[idx.r][idx.c] = [];
         this.updateWrongGridByAllFilledBlocks();
         this.correctPencilBlockByFilledBlock(idx, value);
+        this.updateStateSudoku(idx);
         this.resetBackupData();
     }
 
