@@ -5,7 +5,11 @@ const CONST = {
         h: window.innerHeight
     },
     RATIO: 0.085, //ratio = BLOCK.height / FULL_SCREEN.height
-    get SQUARE_SIZE() { return this.RATIO * this.FULL_SCREEN.h }
+    get SQUARE_SIZE() {
+        return this.RATIO * this.FULL_SCREEN.h
+    }
 }
 
-export { CONST };
+export {
+    CONST
+};
